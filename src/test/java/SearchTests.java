@@ -5,14 +5,18 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.logevents.SelenideLogger.step;
 import static pages.TestPages.mainPage;
 
 public class SearchTests {
 
+    @BeforeEach
+    public void setup() {
+        open("https://github.com/junit-team/junit4");}
+
     @Test
     @DisplayName("Переключение на ветку fixtures")
     public void shouldSwitchBranches() {
-        open("https://github.com/junit-team/junit4");
         mainPage.mainLinkBranches
                         .click();
         mainPage.mainBranchesFixtures
@@ -25,33 +29,48 @@ public class SearchTests {
     @Test
     @DisplayName("Позитивные проверки поиска по релизам ")
     public void searshTestReleases() {
-        open("https://github.com/junit-team/junit4");
-        mainPage.mainAuthSingIn.click();
-        mainPage.mainInputLog
-                .sendKeys("alex156qa");
-        mainPage.mainInputPass
-                .sendKeys("Sasha!kazan156");
-        mainPage.mainAuthorButton
-                .click();
-        mainPage.mainSearchIncognito
-                .click();
-        mainPage.mainSearchTextInput
-                .sendKeys("4.9.");
-        mainPage.mainSearchTextInput
-                .pressEnter();
-        mainPage.mainBlokRelease
-                        .shouldHave(text("doc/ReleaseNotes4.9.md"));
-        mainPage.mainSearchInput
-                        .click();
-        mainPage.mainSearchTextInput
-                .sendKeys("Summary of Changes in version 4.9, final");
-        mainPage.mainSearchTextInput
-                .pressEnter();
-        mainPage.mainBlokRelease
-                .shouldHave(text("## Summary of Changes in version 4.9, final ##\n" +
-                        "Release theme: Test-class and suite level Rules."));
-        sleep(2000);
-
+        step("Проверка поиска по номеру релиза", () -> {
+                    mainPage.mainAuthSingIn.click();
+                    mainPage.mainInputLog
+                            .sendKeys("alex156qa");
+                    mainPage.mainInputPass
+                            .sendKeys("pass");
+                    mainPage.mainAuthorButton
+                            .click();
+                    mainPage.mainSearchIncognito
+                            .click();
+                    mainPage.mainSearchTextInput
+                            .sendKeys("4.9.");
+                    mainPage.mainSearchTextInput
+                            .pressEnter();
+                    mainPage.mainBlokRelease
+                            .shouldHave(text("doc/ReleaseNotes4.9.md"));
+                });
+                step("Проверка поиска по строчкам из релиза", () -> {
+                            mainPage.mainSearchInput
+                                    .click();
+                            mainPage.mainButtonSearchOff
+                                    .click();
+                            mainPage.mainSearchTextInput
+                                    .sendKeys("repo:junit-team/junit4 Summary of Changes in version 4.9, final");
+                            mainPage.mainSearchTextInput
+                                    .pressEnter();
+                            mainPage.mainBlokRelease
+                                    .shouldHave(text("## Summary of Changes in version 4.9, final ##"));
+                        });
+                        step("Проверка поиска по названию релиза", () -> {
+                            mainPage.mainSearchInput
+                                    .click();
+                            mainPage.mainButtonSearchOff
+                                    .click();
+                            mainPage.mainSearchTextInput
+                                    .sendKeys("repo:junit-team/junit4 doc/ReleaseNotes4.8.1.md");
+                            mainPage.mainSearchTextInput
+                                    .pressEnter();
+                            mainPage.mainBlokRelease
+                                    .shouldHave(text("doc/ReleaseNotes4.8.1.md"));
+                            sleep(7000);
+                        });
 
 
     }

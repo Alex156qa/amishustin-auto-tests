@@ -25,6 +25,7 @@ public class MainPage {
     public SelenideElement mainAuthSingIn =  $(".HeaderMenu-link.HeaderMenu-link--sign-in.flex-shrink-0.no-underline.d-block.d-lg-inline-block.border.border-lg-0.rounded.rounded-lg-0.p-2.p-lg-0");
     public SelenideElement mainBlokRelease =  $("[data-testid=\"results-list\"]");
     public SelenideElement mainSearchOpen =  $("#query-builder-test");
+    public SelenideElement mainButtonSearchOff =  $("#query-builder-test-clear-button");
 
 
 
