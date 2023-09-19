@@ -12,66 +12,63 @@ public class SearchTests {
 
     @BeforeEach
     public void setup() {
-        open("https://github.com/junit-team/junit4");}
+        open("https://github.com/junit-team/junit4");
+    }
 
     @Test
     @DisplayName("Переключение на ветку fixtures")
     public void shouldSwitchBranches() {
         mainPage.mainLinkBranches
-                        .click();
+                .click();
         mainPage.mainBranchesFixtures
-                        .click();
+                .click();
         mainPage.mainDropDownFixtures
                 .shouldHave(text("Fixtures"));
-        sleep(2000);
     }
 
     @Test
     @DisplayName("Позитивные проверки поиска по релизам ")
     public void searshTestReleases() {
         step("Проверка поиска по номеру релиза", () -> {
-                    mainPage.mainAuthSingIn.click();
-                    mainPage.mainInputLog
-                            .sendKeys("alex156qa");
-                    mainPage.mainInputPass
-                            .sendKeys("pass");
-                    mainPage.mainAuthorButton
-                            .click();
-                    mainPage.mainSearchIncognito
-                            .click();
-                    mainPage.mainSearchTextInput
-                            .sendKeys("4.9.");
-                    mainPage.mainSearchTextInput
-                            .pressEnter();
-                    mainPage.mainBlokRelease
-                            .shouldHave(text("doc/ReleaseNotes4.9.md"));
-                });
-                step("Проверка поиска по строчкам из релиза", () -> {
-                            mainPage.mainSearchInput
-                                    .click();
-                            mainPage.mainButtonSearchOff
-                                    .click();
-                            mainPage.mainSearchTextInput
-                                    .sendKeys("repo:junit-team/junit4 Summary of Changes in version 4.9, final");
-                            mainPage.mainSearchTextInput
-                                    .pressEnter();
-                            mainPage.mainBlokRelease
-                                    .shouldHave(text("## Summary of Changes in version 4.9, final ##"));
-                        });
-                        step("Проверка поиска по названию релиза", () -> {
-                            mainPage.mainSearchInput
-                                    .click();
-                            mainPage.mainButtonSearchOff
-                                    .click();
-                            mainPage.mainSearchTextInput
-                                    .sendKeys("repo:junit-team/junit4 doc/ReleaseNotes4.8.1.md");
-                            mainPage.mainSearchTextInput
-                                    .pressEnter();
-                            mainPage.mainBlokRelease
-                                    .shouldHave(text("doc/ReleaseNotes4.8.1.md"));
-                            sleep(7000);
-                        });
-
-
+            mainPage.mainAuthSingIn.click();
+            mainPage.mainInputLog
+                    .sendKeys("alex156qa");
+            mainPage.mainInputPass
+                    .sendKeys("pass");
+            mainPage.mainAuthorButton
+                    .click();
+            mainPage.mainSearchIncognito
+                    .click();
+            mainPage.mainSearchTextInput
+                    .sendKeys("4.9.");
+            mainPage.mainSearchTextInput
+                    .pressEnter();
+            mainPage.mainBlokRelease
+                    .shouldHave(text("doc/ReleaseNotes4.9.md"));
+        });
+        step("Проверка поиска по строчкам из релиза", () -> {
+            mainPage.mainSearchInput
+                    .click();
+            mainPage.mainButtonSearchOff
+                    .click();
+            mainPage.mainSearchTextInput
+                    .sendKeys("repo:junit-team/junit4 Summary of Changes in version 4.9, final");
+            mainPage.mainSearchTextInput
+                    .pressEnter();
+            mainPage.mainBlokRelease
+                    .shouldHave(text("## Summary of Changes in version 4.9, final ##"));
+        });
+        step("Проверка поиска по названию релиза", () -> {
+            mainPage.mainSearchInput
+                    .click();
+            mainPage.mainButtonSearchOff
+                    .click();
+            mainPage.mainSearchTextInput
+                    .sendKeys("repo:junit-team/junit4 doc/ReleaseNotes4.8.1.md");
+            mainPage.mainSearchTextInput
+                    .pressEnter();
+            mainPage.mainBlokRelease
+                    .shouldHave(text("doc/ReleaseNotes4.8.1.md"));
+        });
     }
 }
