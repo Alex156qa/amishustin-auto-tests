@@ -1,5 +1,8 @@
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +17,12 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static pages.TestPages.mainPage;
 
+@Owner("Alex156qa")
+@Feature("Авторизация")
 public class AuthTest {
 
     @BeforeEach
@@ -26,33 +32,44 @@ public class AuthTest {
     }
 
     @Test
-    @DisplayName("Успешная авторизация")
+    @Story("Авторизация")
+    @DisplayName("Авторизация с корректными данными")
     public void shouldAuthorizeTest() {
-       mainPage.mainInputLog
-                .sendKeys("alex156qa");
-       mainPage.mainInputPass
-               .sendKeys("123");
-      mainPage.mainAuthorButton
-               .click();
-        mainPage.mainLogoAccount
-                .click();
-        mainPage.mainYourProfile
-                .click();
-        mainPage.mainYourNickname
-                .shouldHave(text("Alex156qa"));
+        step("Заполнить поля логина и пароля и нажать кнопку авторизации", () -> {
+            mainPage.mainInputLog
+                    .sendKeys("alex156qa");
+            mainPage.mainInputPass
+                    .sendKeys("123");
+        });
+        step("Проверить, что аккаунт авторизовался", () -> {
+            mainPage.mainAuthorButton
+                    .click();
+            mainPage.mainLogoAccount
+                    .click();
+            mainPage.mainYourProfile
+                    .click();
+            mainPage.mainYourNickname
+                    .shouldHave(text("Alex156qa"));
+        });
     }
+
     @MethodSource("incorrectCredentials")
+    @Story("Авторизация неуспешная")
     @ParameterizedTest(name = "{displayName} {0}")
     @DisplayName("Авторизация с некорректными данными:")
-    public void shouldNotAuthorizeTest(String type, String phone, String password){
-       mainPage.mainInputLog
-                .sendKeys(phone);
-        mainPage.mainInputPass
-                .sendKeys(password);
-        mainPage.mainAuthorButton
-                .click();
-        mainPage.mainErrorAuthor
-                .shouldBe(visible);
+    public void shouldNotAuthorizeTest(String type, String phone, String password) {
+        step("Заполнить поля логина и пароля и нажать кнопку авторизации", () -> {
+            mainPage.mainInputLog
+                    .sendKeys(phone);
+            mainPage.mainInputPass
+                    .sendKeys(password);
+            mainPage.mainAuthorButton
+                    .click();
+        });
+        step("Проверить, что отобразилась ошибка", () -> {
+            mainPage.mainErrorAuthor
+                    .shouldBe(visible);
+        });
     }
 
     static Stream<Arguments> incorrectCredentials() {
@@ -70,4 +87,4 @@ public class AuthTest {
                 )
         );
     }
-    }
+}

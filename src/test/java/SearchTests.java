@@ -1,3 +1,5 @@
+import io.qameta.allure.Owner;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -5,28 +7,34 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.logevents.SelenideLogger.step;
+import static io.qameta.allure.Allure.step;
 import static pages.TestPages.mainPage;
 
 public class SearchTests {
-
+    @Owner("Alex156qa")
     @BeforeEach
     public void setup() {
         open("https://github.com/junit-team/junit4");
     }
 
     @Test
+    @Story("Переключение ветки")
     @DisplayName("Переключение на ветку fixtures")
     public void shouldSwitchBranches() {
+        step("Выбрать ветку Fixtures", () -> {
         mainPage.mainLinkBranches
                 .click();
         mainPage.mainBranchesFixtures
                 .click();
+        });
+        step("Проверить, что мы переключились на ветку Fixtures", () -> {
         mainPage.mainDropDownFixtures
                 .shouldHave(text("Fixtures"));
+    });
     }
 
     @Test
+    @Story("Поиск по элементам в релизе")
     @DisplayName("Позитивные проверки поиска по релизам ")
     public void searshTestReleases() {
         step("Проверка поиска по номеру релиза", () -> {
@@ -34,7 +42,7 @@ public class SearchTests {
             mainPage.mainInputLog
                     .sendKeys("alex156qa");
             mainPage.mainInputPass
-                    .sendKeys("pass");
+                    .sendKeys("123");
             mainPage.mainAuthorButton
                     .click();
             mainPage.mainSearchIncognito
